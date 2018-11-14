@@ -23,15 +23,26 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ATank* ControlledTank = GetControlledTank();
+}
 
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	//TODO move to player
+	AimAtPlayer();
+	//TODO fire if ready
+}
+
+void ATankAIController::AimAtPlayer() const
+{
 	ATank* PlayerTank = GetPlayerTank();
-	if (!PlayerTank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No PlayerTank found!"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerTank found: %s"), *PlayerTank->GetName());
-	}
+	if (!PlayerTank) { return; }
+
+	FVector PlayerLocation = PlayerTank->GetActorLocation();
+
+	ATank* ControlledTank = GetControlledTank();
+	if (!ControlledTank) { return; }
+
+	ControlledTank->AimAt(PlayerLocation);
 }

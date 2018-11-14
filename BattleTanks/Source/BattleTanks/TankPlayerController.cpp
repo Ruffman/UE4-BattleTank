@@ -4,7 +4,6 @@
 #include "Tank.h"
 #include "CollisionQueryParams.h"
 #include "Engine/World.h"
-#include "Camera/CameraComponent.h"
 
 
 
@@ -29,8 +28,11 @@ void ATankPlayerController::Tick(float DeltaTime)
 void ATankPlayerController::AimAtCrosshair() const
 {
 	FVector HitLocation;
-	if (!GetSightRayHitLocation(HitLocation)) { return; }
-	UE_LOG(LogTemp, Warning, TEXT("HitLocation at: %s!"), *HitLocation.ToString());
+	GetSightRayHitLocation(HitLocation); // TODO return? atm if the tank aims at the sky the hit location is 000 so aiming at himself?
+
+	ATank* ControlledTank = GetControlledTank();
+	if (!ControlledTank) { return; }
+	ControlledTank->AimAt(HitLocation);
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OUT HitLocation) const
@@ -74,7 +76,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 		ECC_Visibility,
 		TraceParams)) 
 	{ 
-		HitLocation = FVector(0.0, 0.0, 0.0);
+		HitLocation = FVector(0.f);
 		return false; 
 	}
 
