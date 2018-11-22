@@ -3,6 +3,8 @@
 #include "Tank.h"
 #include "AimingComponent.h"
 #include "TankBarrel.h"
+#include "Engine/World.h"
+#include "Projectile.h"
 
 
 // Sets default values
@@ -36,6 +38,7 @@ void ATank::AimAt(FVector AimLocation)
 
 void ATank::SetBarrelComponent(UTankBarrel* BarrelToSet)
 {
+	TankBarrel = BarrelToSet;
 	AimingComponent->SetBarrelComponent(BarrelToSet);
 }
 
@@ -46,5 +49,15 @@ void ATank::SetTurretComponent(UTankTurret* TurretToSet)
 
 void ATank::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Pressed fire button"));
+	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (bIsReloaded)
+	{
+		if (!TankBarrel) { return; }
+		AProjectile* ShotProjectile = GetWorld()->SpawnActor<AProjectile>(Projectile, TankBarrel->GetSocketTransform(FName(TEXT("LaunchLocation"))));
+
+		if (!ShotProjectile) { return; }
+		ShotProjectile->InitVelocity(LaunchSpeed);
+
+		LastFireTime = FPlatformTime::Seconds();
+	}
 }

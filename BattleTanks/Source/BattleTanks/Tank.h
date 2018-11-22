@@ -10,6 +10,7 @@
 class UAimingComponent;
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 
 UCLASS()
@@ -20,6 +21,9 @@ class BATTLETANKS_API ATank : public APawn
 public:
 	UPROPERTY(EditAnywhere, Category = Firing)
 	float LaunchSpeed = 5000;
+
+	UPROPERTY(EditAnywhere, Category = Setup)
+	TSubclassOf<AProjectile> Projectile;
 
 	void AimAt(FVector AimLocation);
 
@@ -36,6 +40,14 @@ protected:
 	UAimingComponent* AimingComponent = nullptr;
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = Shooting)
+	float ReloadTimeInSeconds = 5.f;
+
+	double LastFireTime = 0.f;
+
+	//local reference to spawn projectile at end of barrel
+	UTankBarrel* TankBarrel;
+
 	// Sets default values for this pawn's properties
 	ATank();
 
