@@ -19,10 +19,13 @@ class BATTLETANKS_API ATank : public APawn
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 5000;
 
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Shooting)
+		float ReloadTimeInSeconds = 5.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AProjectile> Projectile;
 
 	void AimAt(FVector AimLocation);
@@ -40,9 +43,7 @@ protected:
 	UAimingComponent* AimingComponent = nullptr;
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = Shooting)
-	float ReloadTimeInSeconds = 5.f;
-
+	//keeps track of the last time the tank fired his gun to check if he is allowed to fire again
 	double LastFireTime = 0.f;
 
 	//local reference to spawn projectile at end of barrel
