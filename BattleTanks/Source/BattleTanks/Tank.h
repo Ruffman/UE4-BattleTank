@@ -8,6 +8,7 @@
 
 
 class UAimingComponent;
+class UTankMovementComponent;
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
@@ -23,7 +24,7 @@ public:
 	float LaunchSpeed = 5000;
 
 	UPROPERTY(EditDefaultsOnly, Category = Shooting)
-		float ReloadTimeInSeconds = 5.f;
+	float ReloadTimeInSeconds = 5.f;
 
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AProjectile> Projectile;
